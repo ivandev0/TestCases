@@ -31,6 +31,10 @@ public abstract class HelperBase {
         driver.findElement(locator).click();
     }
 
+    void clickWithoutMove(By locator) {
+        driver.findElement(locator).click();
+    }
+
     String getText(By locator){
         return driver.findElement(locator).getText();
     }

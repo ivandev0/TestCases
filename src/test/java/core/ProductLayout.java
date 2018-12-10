@@ -50,8 +50,8 @@ public class ProductLayout extends HelperBase {
     }
 
     public ProductLayout clickShareNow(){
-        click(SHARE_BUTTON);
-        click(SHARE_NOW);
+        clickWithoutMove(SHARE_BUTTON);
+        clickWithoutMove(SHARE_NOW);
         return this;
     }
 }

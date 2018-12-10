@@ -38,8 +38,10 @@ public class MallTestCase3 extends TestBase {
         //удаляю первый
         filter(cartElements, firstName).forEach(CartElementWrapper::deleteElement);
 
-        Thread.sleep(100); //время для удаления, чтобы страница перестроилась
-        cartElements = cartPage.getCartElements();
+        //для удаления нужно время, чтобы страница перестроилась
+        driver.navigate().refresh();
+        cartElements = new CartPage(driver).getCartElements();
+        //cartElements = cartPage.getCartElements();
         //проверяю что второй на месте
         count = filter(cartElements, secondName).count();
         Assert.assertEquals(1, count);

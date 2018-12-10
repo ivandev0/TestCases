@@ -17,6 +17,7 @@ public class MallTestCase5 extends TestBase {
                 .addNewAddress();
 
         //System.out.println(newAddress.toString());
+        driver.navigate().refresh();
         long count = new DeliveryInfoPage(driver)
                 .getAddresses()
                 .stream()

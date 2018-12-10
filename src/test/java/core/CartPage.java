@@ -20,7 +20,7 @@ public class CartPage extends HelperBase {
     private static final By EMPTY_PORTLET = By.xpath(".//div[contains(@class, \"stub-empty __feed\")]");
     private static final By DELIVERY_ADDRESS = By.xpath(".//a[contains(@hrefattrs,\"mallAddress\")]");
 
-    CartPage(WebDriver driver) {
+    public CartPage(WebDriver driver) {
         super(driver);
     }
 
