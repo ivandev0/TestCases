@@ -1,16 +1,15 @@
 package tests;
 
-import core.LoginMainPage;
+import core.pages.LoginMainPage;
 import core.TestBase;
-import core.UserMainPage;
-import core.wrappers.CartElementWrapper;
+import core.pages.UserMainPage;
 import model.TestBot;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.List;
-
 public class MallTestCase4 extends TestBase {
+    private static boolean NEED_DELETE = false;
     @Test
     public void shareCheck() throws Exception {
         String productName = new LoginMainPage(driver)
@@ -19,13 +18,22 @@ public class MallTestCase4 extends TestBase {
                 .selectRandomItem()
                 .clickShareNow()
                 .getName();
+        NEED_DELETE = true;
         driver.navigate().to(baseUrl + "/feed");
 
         UserMainPage mainPage = new UserMainPage(driver);
         String actualName = mainPage.getFirstMallTitle();
         Assert.assertEquals(productName, actualName);
-        mainPage.deleteFirstMall();
+    }
 
-        Thread.sleep(3000);
+    @Override
+    @After
+    public void tearDown() {
+        if(NEED_DELETE) {
+            driver.get(baseUrl + "/feed");
+            UserMainPage mainPage = new UserMainPage(driver);
+            mainPage.deleteFirstMall();
+        }
+        stop();
     }
 }

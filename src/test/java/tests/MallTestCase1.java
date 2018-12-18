@@ -1,17 +1,19 @@
 package tests;
 
 import core.*;
+import core.pages.CartPage;
+import core.pages.LoginMainPage;
 import core.wrappers.CartElementWrapper;
 import model.TestBot;
 import org.junit.*;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 public class MallTestCase1 extends TestBase {
+    private static String PRODUCT_NAME;
     @Test
     public void consistentAdd() throws Exception {
-        String productName = new LoginMainPage(driver)
+        PRODUCT_NAME = new LoginMainPage(driver)
                 .doLogin(new TestBot())
                 .clickMallOnNavigateMenu()
                 .selectRandomItem()
@@ -23,10 +25,20 @@ public class MallTestCase1 extends TestBase {
                 .clickMallOnNavigateMenu()
                 .goToCart()
                 .getCartElements();
-        long count = filter(cartElements, productName).count();
+        List<CartElementWrapper> elementWithGivenName = filter(cartElements, PRODUCT_NAME);
+        long count = elementWithGivenName.size();
         Assert.assertEquals(1, count);
-        filter(cartElements, productName).forEach(CartElementWrapper::deleteElement);
+    }
 
-        Thread.sleep(1000);
+    @Override
+    @After
+    public void tearDown() {
+        if(PRODUCT_NAME != null) {
+            driver.get(baseUrl + "/mall/shopcart");
+            List<CartElementWrapper> cartElements = new CartPage(driver).getCartElements();
+            List<CartElementWrapper> elementWithGivenName = filter(cartElements, PRODUCT_NAME);
+            elementWithGivenName.forEach(CartElementWrapper::deleteElement);
+        }
+        stop();
     }
 }

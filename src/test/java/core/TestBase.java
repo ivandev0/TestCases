@@ -10,6 +10,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.fail;
@@ -53,10 +54,11 @@ public class TestBase {
         }
     }
 
-    public Stream<CartElementWrapper> filter(List<CartElementWrapper> list, String name){
+    public List<CartElementWrapper> filter(List<CartElementWrapper> list, String name){
         return list
                 .stream()
-                .filter(cartElementWrapper -> cartElementWrapper.getName().equals(name));
+                .filter(cartElementWrapper -> cartElementWrapper.getName().equals(name))
+                .collect(Collectors.toList());
     }
 
 }

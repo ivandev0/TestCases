@@ -1,11 +1,14 @@
-package core;
+package core.pages;
 
+import core.HelperBase;
+import core.NewAddressLayout;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
@@ -24,12 +27,12 @@ public class DeliveryInfoPage extends HelperBase {
     protected void check() {
         Assert.assertTrue("Не загрузилось клавиша добавления нового адреса",
                 new WebDriverWait(driver, TIME_OUT)
-                        .ignoring(StaleElementReferenceException.class)
+                        .ignoring(StaleElementReferenceException.class) //обязательно
                         .until((ExpectedCondition<Boolean>) webDriver -> isElementPresent(ADD_ADDRESS) && isAllElementsPresent(ADDRESSES)));
     }
 
     public NewAddressLayout addNewAddress() {
-        click(ADD_ADDRESS);
+        Assert.assertTrue("Отсутствует кнопка добавления адреса достаки",click(ADD_ADDRESS));
         return new NewAddressLayout(driver).insertNewAddress();
     }
 

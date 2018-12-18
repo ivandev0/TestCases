@@ -2,44 +2,52 @@ package core;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 
 import java.util.Iterator;
 import java.util.List;
 
-public abstract class HelperBase {
-    WebDriver driver;
+public abstract class HelperBase extends WaitBase{
+    protected WebDriver driver;
     private boolean acceptNextAlert = true;
-    final int TIME_OUT = 10;
 
-    HelperBase(WebDriver driver) {
+    protected HelperBase(WebDriver driver) {
         this.driver = driver;
         check();
     }
 
     protected abstract void check();
 
-    void type(By locator, String text) {
-        driver.findElement(locator).clear();
-        driver.findElement(locator).sendKeys(text);
-        driver.findElement(locator).click();
+    protected boolean type(By locator, String text) {
+        if(isElementPresent(locator)) {
+            driver.findElement(locator).clear();
+            driver.findElement(locator).sendKeys(text);
+            driver.findElement(locator).click();
+            return true;
+        }
+        return false;
     }
 
-    void click(By locator) {
-        Actions build = new Actions(driver);
-        build.moveToElement(driver.findElement(locator)).build().perform();
-        driver.findElement(locator).click();
+    protected boolean click(By locator) {
+        if(isElementPresent(locator)) {
+            driver.findElement(locator).click();
+            return true;
+        }
+        return false;
     }
 
-    void clickWithoutMove(By locator) {
-        driver.findElement(locator).click();
+    public void moveToElement(WebElement webElement){
+        new Actions(driver).moveToElement(webElement).build().perform();
     }
 
-    String getText(By locator){
-        return driver.findElement(locator).getText();
+    protected String getText(By locator){
+        if(isElementPresent(locator)) {
+            return driver.findElement(locator).getText();
+        }
+        return null;
     }
 
-    boolean isElementPresent(By by) {
+    protected boolean isElementPresent(By by) {
         try {
             driver.findElement(by);
             return true;
@@ -48,7 +56,7 @@ public abstract class HelperBase {
         }
     }
 
-    boolean isAllElementsPresent(By by) {
+    protected boolean isAllElementsPresent(By by) {
         List<WebElement> elements = driver.findElements(by);
         Iterator var3 = elements.iterator();
 
@@ -86,5 +94,17 @@ public abstract class HelperBase {
         } finally {
             acceptNextAlert = true;
         }
+    }
+
+    /**
+     * Ожидание
+     */
+    protected boolean explicitWait(final ExpectedCondition<?> condition, long maxCheckTimeInSeconds, long millisecondsBetweenChecks) {
+        return super.explicitWait(driver, condition, maxCheckTimeInSeconds, millisecondsBetweenChecks);
+    }
+
+    protected boolean explicitWait(final ExpectedCondition<?> condition, Class<? extends Throwable> ignore,
+                                   long maxCheckTimeInSeconds, long millisecondsBetweenChecks) {
+        return super.explicitWait(driver, condition, ignore, maxCheckTimeInSeconds, millisecondsBetweenChecks);
     }
 }

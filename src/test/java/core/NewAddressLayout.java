@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Random;
@@ -22,26 +23,31 @@ public class NewAddressLayout extends HelperBase {
 
     private String name, country, town, street, apartment, index, phone, save;
 
-    NewAddressLayout(WebDriver driver) {
+    public NewAddressLayout(WebDriver driver) {
         super(driver);
     }
 
     @Override
     protected void check() {
-        Assert.assertTrue("Не загрузился слой для ввода нового адреса",
-                new WebDriverWait(driver, TIME_OUT)
-                        .until((ExpectedCondition<Boolean>) webDriver ->
-                                        isElementPresent(LAYOUT) &&
-                                        isElementPresent(NAME) &&
-                                        isElementPresent(COUNTRY) &&
-                                        isElementPresent(TOWN) &&
-                                        isElementPresent(STREET) &&
-                                        isElementPresent(APARTMENT) &&
-                                        isElementPresent(INDEX) &&
-                                        isElementPresent(PHONE)));
+        Assert.assertTrue("Не загрузился основной слой ввода данных",
+                explicitWait(ExpectedConditions.visibilityOfElementLocated(LAYOUT), 5, 500));
+        Assert.assertTrue("Не загрузилолсь поле ввода имени",
+                explicitWait(ExpectedConditions.visibilityOfElementLocated(NAME), 5, 500));
+        Assert.assertTrue("Не загрузилолсь поле ввода страны",
+                explicitWait(ExpectedConditions.visibilityOfElementLocated(COUNTRY), 5, 500));
+        Assert.assertTrue("Не загрузилолсь поле ввода города",
+                explicitWait(ExpectedConditions.visibilityOfElementLocated(TOWN), 5, 500));
+        Assert.assertTrue("Не загрузилолсь поле ввода улицы",
+                explicitWait(ExpectedConditions.visibilityOfElementLocated(STREET), 5, 500));
+        Assert.assertTrue("Не загрузилолсь поле ввода номера квартиры",
+                explicitWait(ExpectedConditions.visibilityOfElementLocated(APARTMENT), 5, 500));
+        Assert.assertTrue("Не загрузилолсь поле ввода индекса",
+                explicitWait(ExpectedConditions.visibilityOfElementLocated(INDEX), 5, 500));
+        Assert.assertTrue("Не загрузилолсь поле ввода номера телефона",
+                explicitWait(ExpectedConditions.visibilityOfElementLocated(PHONE), 5, 500));
     }
 
-    NewAddressLayout insertNewAddress() {
+    public NewAddressLayout insertNewAddress() {
         name = randomString(3, 6) + " " + randomString(1, 2);
         country = "Россия";
         town = randomString(15, 20);
@@ -50,14 +56,14 @@ public class NewAddressLayout extends HelperBase {
         index = randomInt(6);
         phone = "+7" + randomInt(10);
 
-        type(NAME, name);
-        type(TOWN, town);
-        type(STREET, street);
-        type(APARTMENT, apartment);
-        type(INDEX, index);
-        type(PHONE, phone);
+        Assert.assertTrue("Отсутствует поле ввода имени",type(NAME, name));
+        Assert.assertTrue("Отсутствует поле ввода города",type(TOWN, town));
+        Assert.assertTrue("Отсутствует поле ввода улицы",type(STREET, street));
+        Assert.assertTrue("Отсутствует поле ввода номера квартиры",type(APARTMENT, apartment));
+        Assert.assertTrue("Отсутствует поле ввода индекса",type(INDEX, index));
+        Assert.assertTrue("Отсутствует поле ввода телефона",type(PHONE, phone));
 
-        click(SAVE);
+        Assert.assertTrue("Отсутствует кнопка сохранения нового адреса доставки",click(SAVE));
 
         return this;
     }

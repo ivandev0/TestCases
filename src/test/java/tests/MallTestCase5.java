@@ -1,10 +1,11 @@
 package tests;
 
 import core.*;
+import core.pages.DeliveryInfoPage;
+import core.pages.LoginMainPage;
 import model.TestBot;
 import org.junit.Assert;
 import org.junit.Test;
-import org.openqa.selenium.By;
 
 public class MallTestCase5 extends TestBase {
     @Test

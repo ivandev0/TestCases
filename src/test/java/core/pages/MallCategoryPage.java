@@ -1,15 +1,17 @@
-package core;
+package core.pages;
 
-import core.wrappers.CategoryElementWrapper;
+import core.HelperBase;
+import core.Transformer;
 import core.wrappers.SubCategoryElementWrapper;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class MallCategoryPage extends HelperBase {
     private final int THRESHOLD_TO_LOAD = 10;
@@ -24,12 +26,12 @@ public class MallCategoryPage extends HelperBase {
     @Override
     protected void check() {
         Assert.assertTrue("Не загрузилось достаточное для работы количество товаров",
-                new WebDriverWait(driver, TIME_OUT)
-                        .until((ExpectedCondition<Boolean>) webDriver -> driver.findElements(PRODUCT).size() >= THRESHOLD_TO_LOAD));
+                explicitWait(ExpectedConditions.visibilityOfAllElementsLocatedBy(PRODUCT), StaleElementReferenceException.class,
+                        5, 500));
     }
 
-    public List<SubCategoryElementWrapper> getSubCategoryList(){
-        return Transformer.subCategoryElements(driver.findElements(SUBCATEGORY), driver);
+    public List<SubCategoryElementWrapper> getSubCategoryList() {
+        return Transformer.wrap(driver.findElements(SUBCATEGORY), driver, SubCategoryElementWrapper.class);
     }
 
     public String getCurrentCategory(){

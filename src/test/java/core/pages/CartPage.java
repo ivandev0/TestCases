@@ -1,17 +1,16 @@
-package core;
+package core.pages;
 
+import core.HelperBase;
+import core.Transformer;
 import core.wrappers.CartElementWrapper;
-import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class CartPage extends HelperBase {
 
@@ -37,11 +36,11 @@ public class CartPage extends HelperBase {
     }
 
     public List<CartElementWrapper> getCartElements() {
-        return Transformer.wrapCartElements(driver.findElements(ELEMENTS));
+        return Transformer.wrap(driver.findElements(ELEMENTS), driver, CartElementWrapper.class);
     }
 
     public DeliveryInfoPage clickToDeliveryAddress(){
-        click(DELIVERY_ADDRESS);
+        Assert.assertTrue("Отсутствует кнопка адресов даставки",click(DELIVERY_ADDRESS));
         return new DeliveryInfoPage(driver);
     }
 }
